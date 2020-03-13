@@ -18,6 +18,7 @@ use DB;
 use Carbon\Carbon;
 use Auth;
 use App\Produk;
+use Modules\Master\Entities\Master\Produk as MasterProduk;
 
 class ProdukController extends Controller
 {
@@ -44,7 +45,7 @@ class ProdukController extends Controller
                     return '
           <div class="hidden-sm hidden-xs action-buttons">
 
-            <a class="green" data-rel="tooltip" title="Edit" href="' . route('produk.show', [$data->id]) . '" data-toggle="modal" data-target="#myModal">
+            <a class="green" data-rel="tooltip" title="Beli" href="' . route('produk.show', [$data->id]) . '" data-toggle="modal" data-target="#myModal">
               <i class="ace-icon fa fa-money bigger-130"></i>
             </a>
 
@@ -114,24 +115,7 @@ class ProdukController extends Controller
           </div>';
                 }
             })
-            // ->addColumn('action', function ($data) {
-            //   if ($data->id==1) {
-            //     return '';
-            //   } else {
-            //     return '
-            //     <div class="btn-group">
-            //     <a href="#"  class="btn btn-sm btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btnGroupDrop1"><i class="fa fa-bars"></i>Option</a>
-            //     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-            //       <a href="'.route('user.edit',[$data->id]).'" data-toggle="modal" data-target="#myModal" class="dropdown-item" href="javascript:void(0)">
-            //       <i class="fa fa-fw fa-pencil mr-5"></i>Edit</a>
-            //       <a href="'.route('edit.role.user',[$data->id]).'" data-toggle="modal" data-target="#myModal" class="dropdown-item" href="javascript:void(0)">
-            //       <i class="fa fa-fw fa-lock mr-5"></i>Change Role</a>
-            //       <a class="dropdown-item" href="javascript:void(0)" onclick="hapus('."'$data->id'".')">
-            //       <i class="fa fa-fw fa-trash mr-5"></i>Hapus</a>
-            //
-            //         </div>';
-            //   }
-            // })
+
             ->make(true);
     }
 
@@ -142,6 +126,27 @@ class ProdukController extends Controller
     public function create()
     {
         return view('produk::produk.create');
+    }
+    function beli(Request $req, $id)
+    {
+        $cek = Produk::find($id);
+
+        if ($cek->stok < 1 || $req->beli > $cek->stok) {
+            return response()->json(['status' => 'error', 'msg' => "Stok Tidak Cukup"]);
+        } else {
+            DB::table('penjualan')->insert([
+                'userId' => Auth::user()->id,
+                'produkId' => $id,
+                'qty' => $req->beli,
+                'harga' => $req->harga * $req->beli,
+                'created_at' => now()
+            ]);
+            $totalqty = Produk::find($id);
+            Produk::where('id', $id)->update([
+                'stok' => $totalqty->stok - $req->beli
+            ]);
+            return response()->json(['status' => 'success', 'msg' => 'Sukses Melakukan transaksi']);
+        }
     }
 
     /**
@@ -169,7 +174,8 @@ class ProdukController extends Controller
      */
     public function show($id)
     {
-        return view('produk::show');
+        $data = Produk::find($id);
+        return view('produk::produk.show', compact('data'));
     }
 
     /**

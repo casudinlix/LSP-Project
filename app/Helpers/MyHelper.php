@@ -10,10 +10,13 @@ if (!function_exists('DummyFunction')) {
      */
     function DummyFunction()
     {
-
     }
 }
 function coba()
 {
-  return database_path();
+    return database_path();
+}
+function tgl($tgl)
+{
+    return date('d/m/Y', strtotime($tgl));
 }

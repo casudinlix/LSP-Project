@@ -69,10 +69,10 @@
                 <b class="arrow"></b>
             </li>
 
-            <li class="">
-                <a href="form-elements-2.html">
+            <li class="{{ Request::segment(2) === 'nota' ? 'active' : null }}">
+                <a href="{{route('nota.index')}}">
                     <i class="menu-icon fa fa-caret-right"></i>
-                    Form Elements 2
+                    Nota
                 </a>
 
                 <b class="arrow"></b>

@@ -14,7 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-    'version'=>'1.0.0',
+    'version' => '1.0.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -178,7 +178,10 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         browner12\helpers\HelperServiceProvider::class,
-        Yoeunes\Toastr\ToastrServiceProvider::class
+        Yoeunes\Toastr\ToastrServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+
+
 
     ],
 
@@ -231,6 +234,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

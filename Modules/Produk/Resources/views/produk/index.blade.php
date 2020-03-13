@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-Users
+Produk
 @endsection
 @section('css')
 <link rel="stylesheet" href="{{asset('dt.css')}}">
@@ -12,7 +12,7 @@ Users
 @section('content')
 <div class="row">
     <div class="col-xs-12">
-        <h3 class="header smaller lighter blue">User List</h3>
+        <h3 class="header smaller lighter blue">Produk List</h3>
         @if (Auth::user()->id==1)
         <a href="{{route('produk.create')}}" class="btn btn-info" data-toggle="modal" data-target="#myModal">Tambah
             Barang</a>
