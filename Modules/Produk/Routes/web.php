@@ -11,6 +11,7 @@
 |
 */
 
-Route::prefix('produk')->group(function() {
-    Route::get('/', 'ProdukController@index');
+Route::group(['middleware' => ['auth', 'checkstatus'], 'prefix' => 'my'], function () {
+    Route::resource('produk', 'ProdukController');
+    Route::post('api/produk', 'ProdukController@list')->name('api.produk');
 });
